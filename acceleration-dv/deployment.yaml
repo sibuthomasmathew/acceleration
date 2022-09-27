@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: acceleration-dv
+  name: acceleration-dv
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: acceleration-dv
+  template:
+    metadata:
+      labels:
+        app: acceleration-dv
+    spec:
+      containers:
+      - image: acceleration-dv:v0.1
+        name: acceleration-dv
+        env:
+        - name: WEB_PORT
+          value: "3001"
+        imagePullPolicy: Never
+        ports:
+          - name: liveness-port
+            containerPort: 3001
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: liveness-port
+          failureThreshold: 3
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: liveness-port
+          failureThreshold: 2
+          periodSeconds: 5

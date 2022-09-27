@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: acceleration
+
+namespace: acceleration
+resources:
+- namespace.yaml
+
+- acceleration-a/deployment.yaml
+- acceleration-a/service.yaml
+
+- acceleration-calc/deployment.yaml
+- acceleration-calc/service.yaml
+- acceleration-calc/ingress.yaml
+
+- acceleration-dv/deployment.yaml
+- acceleration-dv/service.yaml

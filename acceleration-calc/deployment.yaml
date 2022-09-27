@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: acceleration-calc
+  name: acceleration-calc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: acceleration-calc
+  template:
+    metadata:
+      labels:
+        app: acceleration-calc
+    spec:
+      containers:
+      - image: acceleration-calc:v0.1
+        name: acceleration-calc
+        env:
+        - name: WEB_PORT
+          value: "3000"
+        - name: DV_URL
+          value: "http://acceleration-dv:3001/dv"
+        - name: A_URL
+          value: "http://acceleration-a:3002/a"
+        imagePullPolicy: Never
+        ports:
+          - name: liveness-port
+            containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: liveness-port
+          failureThreshold: 3
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: liveness-port
+          failureThreshold: 2
+          periodSeconds: 5

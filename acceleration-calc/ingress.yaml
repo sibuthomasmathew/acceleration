@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: acceleration
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "acceleration.io"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/calc"
+        backend:
+          service:
+            name: acceleration-calc
+            port:
+              number: 3000
